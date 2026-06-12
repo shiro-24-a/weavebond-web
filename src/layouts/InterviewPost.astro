@@ -91,14 +91,10 @@ const sessionLabel = frontmatter.sessionNumber
     }
 
     .site-logo {
-      font-family: "Noto Serif JP", serif;
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--ink-soft);
-      letter-spacing: .06em;
-    }
-
-    .site-logo span {
+      font-family: "Syne", sans-serif;
+      letter-spacing: .18em;
+      font-size: .72rem;
+      font-weight: 700;
       color: var(--amber);
     }
 
@@ -351,61 +347,83 @@ const sessionLabel = frontmatter.sessionNumber
     }
 
     /* ─────────────────────────────────────────────────────────────
-       FOOTER
+       NEXT PREVIEW LINK — 次回予告ブロック
     ───────────────────────────────────────────────────────────── */
 
-    .site-footer {
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
+    :global(.article-body .next-preview) {
+      display: block;
+      margin-top: 3rem;
+      padding: 1.4rem 1.6rem;
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+      text-decoration: none;
+      transition: border-color .15s, background .15s;
     }
 
-    .site-footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 2rem;
+    :global(a.next-preview:hover) {
+      border-left-color: var(--ink);
+      background: #f3f0e9;
     }
 
-    .footer-brand {
-      display: flex;
-      flex-direction: column;
-      gap: .6rem;
-    }
-
-    .footer-logo {
-      font-family: "Noto Serif JP", serif;
-      font-size: .9rem;
-      font-weight: 600;
-      color: var(--ink-soft);
-    }
-
-    .footer-logo span {
+    :global(.next-preview-label) {
+      display: block;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
       color: var(--amber);
+      margin-bottom: .5rem;
     }
 
-    .footer-copy {
-      font-size: .72rem;
-      color: var(--ink-muted);
+    :global(.next-preview-title) {
+      display: block;
+      font-family: "Noto Serif JP", serif;
+      font-size: 1rem;
+      color: var(--ink);
       line-height: 1.7;
     }
 
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .footer-link {
+    :global(.next-preview-arrow) {
+      display: inline-block;
+      margin-top: .6rem;
       font-size: .8rem;
-      color: var(--ink-muted);
-      transition: color .15s;
+      color: var(--amber);
+      font-weight: 700;
     }
 
-    .footer-link:hover {
+    /* ─────────────────────────────────────────────────────────────
+       FOOTER — BlogPost.astro と同構造
+    ───────────────────────────────────────────────────────────── */
+
+    .article-footer {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-back {
       color: var(--amber);
+      font-weight: 700;
+      font-size: .9rem;
+      transition: opacity .15s;
+    }
+
+    .footer-back:hover {
+      opacity: .75;
+    }
+
+    .footer-series-note {
+      font-size: .75rem;
+      color: var(--ink-muted);
+      text-align: right;
+      line-height: 1.7;
     }
 
     /* ─────────────────────────────────────────────────────────────
@@ -443,13 +461,14 @@ const sessionLabel = frontmatter.sessionNumber
         grid-column: 1 / -1;
       }
 
-      .site-footer-inner {
+      .article-footer {
         flex-direction: column;
-        gap: 1.5rem;
+        align-items: flex-start;
+        gap: .8rem;
       }
 
-      .footer-links {
-        gap: 1.2rem;
+      .footer-series-note {
+        text-align: left;
       }
     }
   </style>
@@ -460,7 +479,7 @@ const sessionLabel = frontmatter.sessionNumber
   <!-- SITE HEADER -->
   <header class="site-header">
     <div class="site-header-inner">
-      <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
+      <a href="/" class="site-logo">WEAVEBOND</a>
       <a href="/" class="back-link">← 記事一覧</a>
     </div>
   </header>
@@ -542,21 +561,12 @@ const sessionLabel = frontmatter.sessionNumber
   </article>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="footer-brand">
-        <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
-        <p class="footer-copy">
-          ChatGPT・Claude・Geminiとの対話から、<br>
-          AIと人間の関係を考えるブログ。
-        </p>
-      </div>
-      <nav class="footer-links">
-        <a href="/about" class="footer-link">このサイトについて</a>
-        <a href="/privacy" class="footer-link">プライバシーポリシー</a>
-        <a href="/contact" class="footer-link">お問い合わせ</a>
-      </nav>
-    </div>
+  <footer class="article-footer">
+    <a href="/" class="footer-back">← 記事一覧へ戻る</a>
+    <p class="footer-series-note">
+      AI採用面接シリーズ<br>
+      ChatGPT · Claude · Gemini
+    </p>
   </footer>
 
 </body>

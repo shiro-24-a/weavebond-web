@@ -1,9 +1,11 @@
 ---
-layout: ../../layouts/BlogPost.astro
+
+layout:  ../../layouts/BlogPost.astro
 title: "AIは思考を代わってくれない。でも、思考を10倍深めてくれる"
 description: "AIは答えを出す道具ではなく、あなたの思考を増幅させる道具です。AI初心者が誤解しがちなAIの役割を整理し、人間とAIの理想的な関係を解説します。"
 pubDate: 2026-06-10
 tags: ["AI活用", "AI初心者", "AIとの付き合い方"]
+
 ---
 
 「AIに聞けば答えが出る」

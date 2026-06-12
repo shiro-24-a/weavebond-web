@@ -1,9 +1,11 @@
 ---
-layout: ../../layouts/BlogPost.astro
+
+layout:  ../../layouts/BlogPost.astro
 title: "ChatGPTのプロンプトは綺麗に書かなくていい？AIから結果を引き出すズボラ対話術"
 description: "ChatGPTやClaudeのプロンプトの書き方に悩む初心者向け。綺麗な指示文よりも重要な考え方と、AIから良い回答を引き出す対話術を解説します。"
 pubDate: 2026-06-05
 tags: ["AI活用", "ChatGPT", "プロンプト"]
+
 ---
 
 「ChatGPTのプロンプトって、ちゃんと勉強しないと使いこなせないのかな？」

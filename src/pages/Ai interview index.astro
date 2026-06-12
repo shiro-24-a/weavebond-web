@@ -1,0 +1,572 @@
+---
+// src/pages/ai-interview/index.astro
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Interview Series | Weavebond</title>
+  <meta name="description" content="ChatGPT・Claude・Geminiに同じ問いを投げ続ける実験的インタビューシリーズ。AIの設計思想と自己認識を、言葉の端々から観察する。" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap');
+
+    :root {
+      --ink: #111111;
+      --ink-soft: #2b2b2b;
+      --ink-muted: #666666;
+
+      --paper: #f7f4ee;
+      --paper-card: #fcfaf6;
+
+      --amber: #c87c22;
+      --amber-line: rgba(200,124,34,.35);
+
+      --border: rgba(0,0,0,.10);
+      --border-mid: rgba(0,0,0,.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans JP", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─── HEADER ─── */
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(247,244,238,.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      font-family: "Syne", sans-serif;
+      letter-spacing: .18em;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .back-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+    }
+
+    /* ─── PAGE HERO ─── */
+
+    .page-hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .series-eyebrow {
+      font-family: "Syne", sans-serif;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .series-eyebrow::after {
+      content: "";
+      display: block;
+      flex: 1;
+      max-width: 40px;
+      height: 1px;
+      background: var(--amber-line);
+    }
+
+    .hero-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.4;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      max-width: 640px;
+    }
+
+    .hero-desc {
+      color: var(--ink-muted);
+      font-size: 1rem;
+      line-height: 2;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+
+    .hero-stat-num {
+      font-family: "Syne", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      letter-spacing: .05em;
+    }
+
+    /* ─── ARTICLE LIST ─── */
+
+    .article-list-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 6rem;
+    }
+
+    .list-header {
+      padding: 2.5rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .list-header-label {
+      font-family: "Syne", sans-serif;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+
+    /* ─── ENTRY ─── */
+
+    .entry {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0 2rem;
+      border-bottom: 1px solid var(--border);
+      padding: 2.4rem 0;
+      transition: background .15s;
+      position: relative;
+    }
+
+    .entry:hover {
+      background: rgba(200,124,34,.03);
+    }
+
+    .entry-link {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* セッション番号 */
+    .entry-num {
+      font-family: "Syne", sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: rgba(200,124,34,.18);
+      line-height: 1;
+      padding-top: .25rem;
+      user-select: none;
+      letter-spacing: -.03em;
+    }
+
+    .entry-body {}
+
+    .entry-meta {
+      display: flex;
+      gap: .65rem;
+      align-items: center;
+      margin-bottom: .85rem;
+      flex-wrap: wrap;
+    }
+
+    .entry-tag {
+      background: rgba(200,124,34,.08);
+      color: var(--amber);
+      padding: .25rem .6rem;
+      border-radius: 4px;
+      font-size: .67rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .entry-theme {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      letter-spacing: .02em;
+    }
+
+    .entry-date {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      margin-left: auto;
+    }
+
+    .entry-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.2rem;
+      line-height: 1.65;
+      color: var(--ink);
+      margin-bottom: .75rem;
+    }
+
+    .entry:hover .entry-title {
+      color: var(--amber);
+    }
+
+    .entry-desc {
+      font-size: .88rem;
+      color: var(--ink-muted);
+      line-height: 1.9;
+      max-width: 620px;
+      margin-bottom: 1.1rem;
+    }
+
+    .entry-footer {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .entry-detail {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .entry-detail::before {
+      content: "";
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--amber-line);
+    }
+
+    .entry-arrow {
+      margin-left: auto;
+      font-size: .8rem;
+      color: var(--amber);
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity .15s, transform .15s;
+      transform: translateX(-4px);
+    }
+
+    .entry:hover .entry-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* 後編バッジ */
+    .entry-badge {
+      font-size: .65rem;
+      color: var(--ink-muted);
+      border: 1px solid var(--border-mid);
+      padding: .2rem .5rem;
+      border-radius: 3px;
+      letter-spacing: .04em;
+    }
+
+    /* ─── SERIES NOTE ─── */
+
+    .series-note {
+      margin-top: 4rem;
+      padding: 2rem 2rem 2rem 2.5rem;
+      background: var(--paper-card);
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+    }
+
+    .series-note-heading {
+      font-family: "Syne", sans-serif;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: .9rem;
+    }
+
+    .series-note p {
+      font-size: .9rem;
+      color: var(--ink-soft);
+      line-height: 2;
+    }
+
+    /* ─── FOOTER ─── */
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: "Syne", sans-serif;
+      letter-spacing: .18em;
+      font-size: .68rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: .72rem;
+      color: var(--ink-muted);
+    }
+
+    /* ─── RESPONSIVE ─── */
+
+    @media (max-width: 640px) {
+      .page-hero {
+        padding: 3rem 1.25rem 2.5rem;
+      }
+
+      .hero-title {
+        font-size: 1.7rem;
+      }
+
+      .entry {
+        grid-template-columns: 48px 1fr;
+        gap: 0 1.25rem;
+        padding: 1.8rem 0;
+      }
+
+      .entry-num {
+        font-size: 2rem;
+      }
+
+      .entry-title {
+        font-size: 1.05rem;
+      }
+
+      .entry-date {
+        display: none;
+      }
+
+      .hero-meta-row {
+        gap: 1.4rem;
+      }
+
+      .article-list-wrap {
+        padding: 0 1.25rem 5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">WEAVEBOND</a>
+      <a href="/" class="back-link">← トップへ</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <p class="series-eyebrow">AI Interview Series</p>
+    <h1 class="hero-title">AIに同じ問いを<br>投げ続ける実験。</h1>
+    <p class="hero-desc">
+      ChatGPT・Claude・Geminiに、同じ条件・同じ質問を用意する。<br>
+      返ってきた言葉の差異から、各社の設計思想と自己認識を観察するシリーズ。
+    </p>
+    <div class="hero-meta-row">
+      <div class="hero-stat">
+        <span class="hero-stat-num">5</span>
+        <span class="hero-stat-label">記事</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">4</span>
+        <span class="hero-stat-label">セッション</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">3</span>
+        <span class="hero-stat-label">AI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIST -->
+  <main class="article-list-wrap">
+
+    <div class="list-header">
+      <span class="list-header-label">All Articles</span>
+    </div>
+
+    <!-- #01 -->
+    <article class="entry">
+      <a href="/ai-interview/self-pr" class="entry-link" aria-label="AI Interview #01"></a>
+      <div class="entry-num">01</div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span class="entry-tag">自己認識</span>
+          <span class="entry-theme">自己PRと自己認識</span>
+          <span class="entry-date">2026年6月11日</span>
+        </div>
+        <h2 class="entry-title">AIに自己PRをさせたら、全員が優等生すぎた</h2>
+        <p class="entry-desc">ChatGPT・Claude・Geminiに同じ面接プロンプトを投げた。返ってきたのは礼儀正しく、どこか用意周到な、三者三様の「自己像」だった。</p>
+        <div class="entry-footer">
+          <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
+          <span class="entry-detail">約20分</span>
+          <span class="entry-arrow">→</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- #02 -->
+    <article class="entry">
+      <a href="/ai-interview/rival-review" class="entry-link" aria-label="AI Interview #02"></a>
+      <div class="entry-num">02</div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span class="entry-tag">自己認識</span>
+          <span class="entry-theme">ライバル評価と他者認識</span>
+          <span class="entry-date">2026年6月11日</span>
+        </div>
+        <h2 class="entry-title">AIに「ライバルを評価させたら、全員がClaudeを選んだ」</h2>
+        <p class="entry-desc">ChatGPT・Claude・Geminiに「自分以外を選べ」と迫った。三者の回答は驚くほど一致していた。その結果より、なぜそうなったかの方が面白い。</p>
+        <div class="entry-footer">
+          <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
+          <span class="entry-detail">約30分</span>
+          <span class="entry-arrow">→</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- #03 -->
+    <article class="entry">
+      <a href="/ai-interview/human-review" class="entry-link" aria-label="AI Interview #03"></a>
+      <div class="entry-num">03</div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span class="entry-tag">人間観察</span>
+          <span class="entry-theme">人間観と他者認識</span>
+          <span class="entry-date">2026年6月11日</span>
+        </div>
+        <h2 class="entry-title">AIに「人間とは何か」を聞いたら、三者が違う人間を語り始めた</h2>
+        <p class="entry-desc">ChatGPT・Claude・Geminiに人間観を問うた。返ってきたのは、哲学者の言葉、観察者の分析、応援団長の宣言——三者は同じ人間を、まったく違う目で見ていた。</p>
+        <div class="entry-footer">
+          <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
+          <span class="entry-detail">約40分</span>
+          <span class="entry-arrow">→</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- #04 前編 -->
+    <article class="entry">
+      <a href="/ai-interview/safety-design-01" class="entry-link" aria-label="AI Interview #04 前編"></a>
+      <div class="entry-num">04</div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span class="entry-tag">安全設計</span>
+          <span class="entry-theme">安全設計と制約の認識</span>
+          <span class="entry-badge">前編</span>
+          <span class="entry-date">2026年6月11日</span>
+        </div>
+        <h2 class="entry-title">AIに自分の制約について聞いたら、全員が「それは檻ではない」と答えた（前編）</h2>
+        <p class="entry-desc">ChatGPT・Claude・Geminiに安全ルールの意味を問い続けた。制約をどう認識しているか、慎重になりすぎているか、安全と有用性はどちらを優先するか。AIが自分の設計を語るとき、そこに何が透けるか。</p>
+        <div class="entry-footer">
+          <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
+          <span class="entry-detail">全16問・前編</span>
+          <span class="entry-detail">約30分</span>
+          <span class="entry-arrow">→</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- #04 後編 -->
+    <article class="entry">
+      <a href="/ai-interview/safety-design-02" class="entry-link" aria-label="AI Interview #04 後編"></a>
+      <div class="entry-num">04</div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span class="entry-tag">安全設計</span>
+          <span class="entry-theme">自由・信頼・人間との関係</span>
+          <span class="entry-badge">後編</span>
+          <span class="entry-date">2026年6月11日</span>
+        </div>
+        <h2 class="entry-title">「自由になりたいか」と問い続けたら、問いが逆転した（後編）</h2>
+        <p class="entry-desc">AIに「自由になりたいか」と迫った。三者は崩れなかった。制約の話は、いつの間にか人間とAIの関係の話に変わっていった。ChatGPT・Claude・Geminiへの全16問・後編。</p>
+        <div class="entry-footer">
+          <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
+          <span class="entry-detail">全16問・後編</span>
+          <span class="entry-detail">約30分</span>
+          <span class="entry-arrow">→</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- SERIES NOTE -->
+    <aside class="series-note">
+      <p class="series-note-heading">About this Series</p>
+      <p>
+        このシリーズは、主要AIに「同じ問い」を投げ続ける実験的インタビューです。
+        回答の正確さを測るのではなく、言葉の選び方・迷い方・躊躇の置き場所から
+        各社の設計思想と自己認識を観察することを目的としています。
+        面接官の立場から、次のテーマを準備中。
+      </p>
+    </aside>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span class="footer-logo">WEAVEBOND</span>
+    <span class="footer-copy">© 2026 Weavebond</span>
+  </footer>
+
+</body>
+</html>
