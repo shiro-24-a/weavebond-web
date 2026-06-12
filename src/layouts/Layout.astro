@@ -1,15 +1,27 @@
+---
+// 💡 Markdown（記事）から呼び出されたときだけ、この frontmatter にデータが入ります
+const { frontmatter } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{frontmatter ? frontmatter.title : "Weavebond"}</title>
 	</head>
 	<body>
-		<slot />
+		<main class={frontmatter ? "article-container" : ""}>
+			<slot />
+		</main>
+
+		<footer>
+			<span>© 2026 Weavebond</span>
+			<a href="/privacy" class="footer-link">Privacy & Contact</a>
+		</footer>
 	</body>
 </html>
 
@@ -18,6 +30,142 @@
 	body {
 		margin: 0;
 		width: 100%;
-		height: 100%;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		background-color: #fcfbf7; /* ほんのり温かみのある白 */
+		color: #1a1a1a;
+		/* 墨文字が最も美しく映える、和モダンに適した明瞭なシステムフォント */
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+	}
+
+	main {
+		flex: 1; /* コンテンツが少なくてもフッターを一番下に押し出す魔法 */
+	}
+
+	/* ==========================================================================
+	   📱 スマホ・PCで最高に読みやすくなる「記事ページ専用」の設計（メリハリの正体）
+	   ========================================================================== */
+	.article-container {
+		max-width: 680px; /* 1行の長さを、人間の目が一度に追える最適な幅（データ基準）に制限 */
+		margin: 0 auto; /* 画面の真ん中に寄せる */
+		padding: 3rem 1.5rem; /* スマホ画面の端に文字が張り付くのを防ぐ、絶対必要な左右の余白 */
+	}
+
+	/* ⚠️ Astroの仕様を突破するコード: 
+	  「:global(要素名)」と書くことで、Markdownから流れてきた文字にデザインを強制適用します。
+	*/
+
+	/* 📄 本文（段落）の調整：一行改行の単調さをぶっ壊す */
+	.article-container :global(p) {
+		font-size: 1rem;
+		line-height: 1.85; /* データ上、スクロールしながら読む時に最も視線移動がスムーズになる行間 */
+		letter-spacing: 0.03em; /* ほんの少しだけ文字の間隔をあけ、知的で高級感のある空気にする */
+		margin-top: 0;
+		margin-bottom: 1.85rem; /* 段落の後に「文字1個半分」の明確な空間を空け、視覚的な『塊』を作る */
+	}
+
+	/* 🏷 記事の特大タイトル */
+	.article-container :global(h1) {
+		font-size: 1.85rem; /* スマホでも画面を圧迫せず、かつ一目でタイトルと分かるジャンプ率 */
+		line-height: 1.4;
+		font-weight: 700;
+		margin-top: 0;
+		margin-bottom: 2.5rem;
+		border-bottom: 1px solid #eeebe3; /* 落ち着いた砂色の線で記事の始まりを締める */
+		padding-bottom: 1.5rem;
+		letter-spacing: 0.02em;
+	}
+
+	/* 🏷 中見出し（ステップ1、など）：これがページ全体のメリハリを作る */
+	.article-container :global(h2) {
+		font-size: 1.35rem;
+		line-height: 1.4;
+		font-weight: 700;
+		/* 【超重要データ】
+		  前の文章と明確に区切るために「上の余白（3.5rem）」を広く、
+		  これから読む文章に意識を向けさせるために「下の余白（1.25rem）」を狭くします。
+		  これが、無意識に「お、ここから話が変わるな」と脳に認識させるメリハリの正体です。
+		*/
+		margin-top: 3.5rem; 
+		margin-bottom: 1.25rem;
+		border-left: 3px solid #1a1a1a; /* 左側に墨色の細い縦線を入れて和モダンを引き締める */
+		padding-left: 0.75rem;
+	}
+
+	/* 🏷 小見出し（ダメな例、など） */
+	.article-container :global(h3) {
+		font-size: 1.1rem;
+		font-weight: 700;
+		margin-top: 2.25rem;
+		margin-bottom: 0.75rem;
+	}
+
+	/* ➖ 区切り線（---） */
+	.article-container :global(hr) {
+		border: 0;
+		border-top: 1px solid #eeebe3;
+		margin: 3.5rem 0;
+	}
+
+	/* 💬 引用ブロック（ダメな例・最強の例などの、視覚的な避難所） */
+	.article-container :global(blockquote) {
+		margin: 0 0 1.85rem 0;
+		padding: 1.25rem 1.5rem;
+		background-color: #f5f3eb; /* 背景の白より一段深い、静かで上質な砂色 */
+		border-left: 2px solid #8c887d; /* 落ち着いたグレーの細線 */
+		border-radius: 4px;
+	}
+	
+	/* 引用の中の文字調整 */
+	.article-container :global(blockquote p) {
+		margin-bottom: 0; /* 枠内の最後の余白をリセットして綺麗に収める */
+		font-size: 0.95rem; /* 本文よりほんの少し小さくして、情報の引き算をする */
+		color: #4a4a4a;
+	}
+
+	/* 🎨 表（テーブル）のスタイル */
+	.article-container :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 2rem;
+		font-size: 0.9rem;
+	}
+
+	.article-container :global(th),
+	.article-container :global(td) {
+		border: 1px solid #eeebe3;
+		padding: 0.75rem;
+		text-align: left;
+	}
+
+	.article-container :global(th) {
+		background-color: #f5f3eb;
+		font-weight: 700;
+	}
+
+	/* ==========================================================================
+	   🎨 フッターのデザイン（既存の美しいスタイルを維持）
+	   ========================================================================== */
+	footer {
+		text-align: center;
+		padding: 2rem 1rem;
+		font-size: 0.85rem;
+		font-family: sans-serif;
+		color: #8c887d;
+		border-top: 1px solid #eeebe3;
+	}
+
+	.footer-link {
+		color: #8c887d;
+		text-decoration: none;
+		margin-left: 1.5rem;
+		border-bottom: 1px dashed #ccc7b9;
+		transition: all 0.2s;
+	}
+
+	.footer-link:hover {
+		color: #c87c22; /* ホバーしたときにオシャレな琥珀色にする */
+		border-bottom: 1px solid #c87c22;
 	}
 </style>

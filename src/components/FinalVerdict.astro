@@ -1,0 +1,128 @@
+---
+// src/components/FinalVerdict.astro
+//
+// 使い方:
+//   <FinalVerdict summary="三者それぞれに明確な得意領域があった。">
+//     <VerdictItem purpose="文章作成" name="Claude"    reason="長文の文脈把握と表現の精度が際立つ。" />
+//     <VerdictItem purpose="情報収集" name="Gemini"    reason="最新情報へのアクセスと引用の正確さが強み。" />
+//     <VerdictItem purpose="汎用作業" name="ChatGPT"   reason="幅広いタスクへの対応力と応答速度が優秀。" />
+//   </FinalVerdict>
+//
+// Props:
+//   title   : string — ブロックタイトル（省略時 "採用結果"）
+//   summary : string — 判定の総括コメント（省略可）
+
+interface Props {
+  title?: string;
+  summary?: string;
+}
+
+const {
+  title = "採用結果",
+  summary,
+} = Astro.props;
+---
+
+<section class="final-verdict">
+  <header class="final-verdict__header">
+    <span class="final-verdict__eyebrow">FINAL VERDICT</span>
+    <h2 class="final-verdict__title">{title}</h2>
+  </header>
+
+  <!-- VerdictItem コンポーネントを slot で受け取る -->
+  <div class="final-verdict__grid">
+    <slot />
+  </div>
+
+  {summary && (
+    <footer class="final-verdict__summary">
+      <p>{summary}</p>
+    </footer>
+  )}
+</section>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     採用判定ブロック
+     ・記事末尾に配置する「まとめカード」
+     ・上部に太いボーダー（= 宣告感）、全体は落ち着いた紙白
+     ・VerdictItem をグリッドで並べる
+  ───────────────────────────────────────────────────────────── */
+
+  .final-verdict {
+    background: var(--paper-card, #fcfaf6);
+    border: 1px solid var(--border-mid, rgba(0,0,0,.18));
+    border-top: 3px solid var(--ink, #111111);
+    border-radius: 4px;
+    padding: 2.2rem 2.4rem;
+    margin: 4rem 0 2rem;
+  }
+
+  /* ── ヘッダー ── */
+  .final-verdict__header {
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,.10));
+  }
+
+  .final-verdict__eyebrow {
+    display: block;
+    font-family: "Syne", sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--amber, #c87c22);
+    margin-bottom: .6rem;
+  }
+
+  .final-verdict__title {
+    font-family: "Noto Serif JP", serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink, #111111);
+    line-height: 1.5;
+
+    /* h2 としてマークアップするが、BlogPost の h2 スタイルを引き継がないよう上書き */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .final-verdict__title::before {
+    display: none !important;
+  }
+
+  /* ── グリッド（VerdictItem の並び） ── */
+  .final-verdict__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(172px, 1fr));
+    gap: .9rem;
+    margin-bottom: 0;
+  }
+
+  /* ── サマリー ── */
+  .final-verdict__summary {
+    margin-top: 1.6rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--border, rgba(0,0,0,.10));
+  }
+
+  .final-verdict__summary p {
+    font-size: .9rem !important;
+    line-height: 2 !important;
+    color: var(--ink-muted, #666666) !important;
+    margin: 0 !important;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 640px) {
+    .final-verdict {
+      padding: 1.6rem 1.4rem;
+    }
+
+    .final-verdict__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

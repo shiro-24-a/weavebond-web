@@ -1,11 +1,687 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const cognitionSeries = [
+  {
+    href: "/blog/why-chatgpt-is-so-kind",
+    tag: "共感と設計",
+    title: "AIはなぜ否定しないのか？共感してくれる理由は「設計」にあった",
+  },
+  {
+    href: "/blog/ai-empathy-vs-correctness",
+    tag: "認知バイアス",
+    title: "AIが「分かります」と言うとき、それは正しいとは限らない",
+  },
+  {
+    href: "/blog/why-chatgpt-makes-mistakes",
+    tag: "仕組み",
+    title: "ChatGPTの回答が間違っている理由。AIは「正解」ではなく「それっぽい答え」を出している",
+  },
+  {
+    href: "/blog/ai-information-literacy",
+    tag: "情報リテラシー",
+    title: "AIの答えを信じる前に「待って」と思える人が生き抜く",
+  },
+  {
+    href: "/blog/ai-and-echo-chamber",
+    tag: "エコーチェンバー",
+    title: "AIと話しすぎると自分の意見が強化される？",
+  },
+  {
+    href: "/blog/ai-evolution-or-decline",
+    tag: "判断力",
+    title: "AIに相談すると判断力が落ちる？",
+  },
+  {
+    href: "/blog/ai-is-thinking-partner-not-alternative",
+    tag: "思考法",
+    title: "AIは思考を代わってくれない。でも、思考を10倍深めてくれる",
+  },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIとの付き合い方研究所</title>
+  <meta name="description" content="AIはなぜ共感するのか。なぜ間違うのか。人間はどう変わるのか。ChatGPT、Claude、GeminiとのAIとの付き合い方を考えるブログ。" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap');
+
+    :root {
+      --ink: #111111;
+      --ink-soft: #2b2b2b;
+      --ink-muted: #666666;
+
+      --paper: #f7f4ee;
+      --paper-card: #fcfaf6;
+
+      --amber: #c87c22;
+      --amber-light: rgba(200,124,34,.08);
+      --amber-line: rgba(200,124,34,.35);
+
+      --border: rgba(0,0,0,.10);
+      --border-mid: rgba(0,0,0,.18);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans JP", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─── HEADER ─────────────────────────────────── */
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(247,244,238,.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .site-logo span {
+      color: var(--amber);
+    }
+
+    .header-note {
+      font-size: .75rem;
+      color: var(--ink-muted);
+      letter-spacing: .03em;
+    }
+
+    /* ─── HERO ───────────────────────────────────── */
+
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 4.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-family: "Syne", sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--amber-line);
+    }
+
+    .hero-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+      line-height: 1.55;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-subtitle {
+      font-size: .95rem;
+      line-height: 2.1;
+      color: var(--ink-muted);
+    }
+
+    .hero-subtitle p + p {
+      margin-top: .8rem;
+    }
+
+    .hero-aside {
+      padding-left: 3rem;
+      border-left: 1px solid var(--border);
+    }
+
+    .hero-aside-eyebrow {
+      font-size: .7rem;
+      letter-spacing: .12em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-topics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .hero-topics li {
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      font-size: .85rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .hero-topics li::before {
+      content: "";
+      display: block;
+      flex-shrink: 0;
+      width: 18px;
+      height: 1px;
+      background: var(--amber);
+      margin-top: .85em;
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────── */
+
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .section-head::before {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .section-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .section-desc {
+      font-size: .8rem;
+      color: var(--ink-muted);
+    }
+
+    /* ─── CARD GRID ───────────────────────────────── */
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .card:hover {
+      border-color: var(--amber-line);
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    }
+
+    .card-tag {
+      display: inline-block;
+      background: var(--amber-light);
+      color: var(--amber);
+      padding: .25rem .6rem;
+      border-radius: 3px;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      align-self: flex-start;
+    }
+
+    .card-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: .98rem;
+      line-height: 1.75;
+      color: var(--ink);
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .card-arrow {
+      font-size: .78rem;
+      color: var(--amber);
+      font-weight: 700;
+      margin-top: auto;
+      padding-top: .4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .card-arrow::after {
+      content: "→";
+      transition: transform .2s;
+    }
+
+    .card:hover .card-arrow::after {
+      transform: translateX(4px);
+    }
+
+    /* ─── GUIDE SECTION ───────────────────────────── */
+
+    .guide-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .guide-card:hover {
+      border-color: var(--amber-line);
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    }
+
+    .guide-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .guide-card-tag {
+      display: inline-block;
+      background: var(--amber-light);
+      color: var(--amber);
+      padding: .25rem .6rem;
+      border-radius: 3px;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      align-self: flex-start;
+    }
+
+    .guide-card-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .guide-card-desc {
+      font-size: .85rem;
+      color: var(--ink-muted);
+      line-height: 1.85;
+    }
+
+    .guide-card-link {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--amber);
+      padding: .65rem 1.2rem;
+      border: 1.5px solid var(--amber);
+      border-radius: 4px;
+      white-space: nowrap;
+      transition: background .2s, color .2s;
+    }
+
+    .guide-card-link:hover {
+      background: var(--amber);
+      color: white;
+    }
+
+    /* ─── COMING SOON SECTION ─────────────────────── */
+
+    .coming-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      opacity: .8;
+    }
+
+    .coming-badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border: 1px solid var(--border-mid);
+      padding: .25rem .7rem;
+      border-radius: 20px;
+    }
+
+    .coming-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    .coming-desc {
+      font-size: .85rem;
+      line-height: 1.9;
+      color: var(--ink-muted);
+    }
+
+    .coming-topics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-top: .4rem;
+    }
+
+    .coming-topics li {
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      font-size: .83rem;
+      line-height: 1.65;
+      color: var(--ink-muted);
+    }
+
+    .coming-topics li::before {
+      content: "";
+      display: block;
+      flex-shrink: 0;
+      width: 14px;
+      height: 1px;
+      background: var(--border-mid);
+      margin-top: .8em;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────── */
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .site-footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .footer-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .footer-logo span {
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .footer-link:hover {
+      color: var(--amber);
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────── */
+
+    @media (max-width: 900px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        padding: 3.5rem 1.5rem 3rem;
+      }
+
+      .hero-aside {
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-top: 2rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 1.7rem;
+      }
+
+      .section {
+        padding: 3rem 1.25rem;
+      }
+
+      .guide-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+      }
+
+      .guide-card-link {
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      .site-footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .footer-links {
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        AI<span>との付き合い方</span>研究所
+      </a>
+      <span class="header-note">ChatGPT / Claude / Gemini</span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-main">
+      <span class="hero-label">AI × Human Research</span>
+      <h1 class="hero-title">
+        AIとの付き合い方<br>研究所
+      </h1>
+      <div class="hero-subtitle">
+        <p>AIはなぜ共感するのか。<br>なぜ間違うのか。<br>人間はどう変わるのか。</p>
+        <p>ChatGPT、Claude、Geminiとの対話から<br>AIとの付き合い方を考えるブログ。</p>
+      </div>
+    </div>
+
+    <div class="hero-aside">
+      <p class="hero-aside-eyebrow">このブログで扱うテーマ</p>
+      <ul class="hero-topics">
+        <li>AIが共感・同意しやすい理由と設計思想</li>
+        <li>ハルシネーション（誤答）のしくみ</li>
+        <li>AIと話すことで変わる人間の認知</li>
+        <li>エコーチェンバーと思考の自律性</li>
+        <li>AIを「思考のパートナー」として使う技術</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SERIES 1: AIと人間の認知 -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">AIと人間の認知シリーズ</h2>
+      <span class="section-desc">共感・誤答・判断力の変化を読み解く</span>
+    </div>
+
+    <div class="card-grid">
+      {cognitionSeries.map((article) => (
+        <a href={article.href} class="card">
+          <span class="card-tag">{article.tag}</span>
+          <p class="card-title">{article.title}</p>
+          <span class="card-arrow">記事を読む</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- SECTION 2: 実践・活用ガイド -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">実践・活用ガイド</h2>
+      <span class="section-desc">明日から使えるAIとの向き合い方</span>
+    </div>
+
+    <a href="/blog/chatgpt-prompt-guide-for-beginners" class="guide-card">
+      <div class="guide-card-body">
+        <span class="guide-card-tag">プロンプト入門</span>
+        <p class="guide-card-title">ChatGPTプロンプトガイド：はじめての人のために</p>
+        <p class="guide-card-desc">
+          「どう聞けばいい答えが返ってくるのか」──AIとの対話を深めるための<br>
+          プロンプト設計の基本をゼロから解説します。
+        </p>
+      </div>
+      <span class="guide-card-link">記事を読む →</span>
+    </a>
+  </section>
+
+  <!-- SECTION 3: AI採用面接シリーズ -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">AI採用面接シリーズ</h2>
+      <span class="section-desc">AIを「採用」する視点で能力を問い直す</span>
+    </div>
+
+    <div class="coming-card">
+      <span class="coming-badge">準備中</span>
+      <p class="coming-title">AIを「面接官の目」で評価したらどうなるか</p>
+      <p class="coming-desc">
+        ChatGPT、Claude、Gemini──それぞれのAIを、まるで採用面接のように評価したら何が見えてくるのか。<br>
+        思考力・誠実さ・自己認識…AIに「仕事を任せられるか」を問うシリーズを準備中です。
+      </p>
+      <ul class="coming-topics">
+        <li>「正直に答えられるか？」──自己認識と限界の開示</li>
+        <li>「圧力をかけたとき、どう応答するか」──一貫性のテスト</li>
+        <li>「知らないことを知っているか」──不確実性への向き合い方</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
+        <p class="footer-copy">
+          ChatGPT・Claude・Geminiとの対話から、<br>
+          AIと人間の関係を考えるブログ。
+        </p>
+      </div>
+      <nav class="footer-links">
+        <a href="/about" class="footer-link">このサイトについて</a>
+        <a href="/privacy" class="footer-link">プライバシーポリシー</a>
+        <a href="/contact" class="footer-link">お問い合わせ</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

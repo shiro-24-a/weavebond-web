@@ -1,0 +1,147 @@
+---
+// src/components/VerdictItem.astro
+//
+// FinalVerdict の slot 内で使う判定カード（1AI = 1カード）
+//
+// 使い方:
+//   <VerdictItem
+//     purpose="文章作成"
+//     name="Claude"
+//     reason="長文の文脈把握と表現の精度が際立つ。"
+//   />
+//
+// Props:
+//   purpose  : string           — 用途ラベル (例: "文章作成", "情報収集")
+//   name     : string           — AI名 (例: "Claude", "ChatGPT", "Gemini")
+//   reason   : string           — 選定理由（短文）
+//   verdict  : "採用" | "条件付き採用" | "見送り" | string  — 任意の採用判定
+
+interface Props {
+  purpose: string;
+  name: string;
+  reason: string;
+  verdict?: string;
+}
+
+const {
+  purpose,
+  name,
+  reason,
+  verdict,
+} = Astro.props;
+
+// 判定テキストに応じてクラスを付与
+const verdictMod =
+  verdict === "採用"         ? "hire"
+  : verdict === "条件付き採用" ? "conditional"
+  : verdict === "見送り"     ? "pass"
+  : verdict != null          ? "other"
+  : null;
+---
+
+<article class="verdict-item">
+  <div class="verdict-item__top">
+    <span class="verdict-item__purpose">{purpose}</span>
+    {verdict && (
+      <span class={`verdict-item__badge verdict-item__badge--${verdictMod}`}>
+        {verdict}
+      </span>
+    )}
+  </div>
+  <p class="verdict-item__name">{name}</p>
+  <p class="verdict-item__reason">{reason}</p>
+</article>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     判定カード（1件）
+     ・用途ラベル（アンバー小文字） + AI名（セリフ大） + 理由（ミュート）
+     ・hover で紙白→ほんのり明るい白へ浮き上がる微妙な変化
+  ───────────────────────────────────────────────────────────── */
+
+  .verdict-item {
+    background: var(--paper, #f7f4ee);
+    border: 1px solid var(--border, rgba(0,0,0,.10));
+    border-radius: 4px;
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    transition: border-color .18s, box-shadow .18s;
+  }
+
+  .verdict-item:hover {
+    border-color: var(--amber-line, rgba(200,124,34,.35));
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  }
+
+  /* ── 上段: 用途 + 判定バッジ ── */
+  .verdict-item__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+  }
+
+  .verdict-item__purpose {
+    font-family: "Syne", sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--amber, #c87c22);
+  }
+
+  /* 採用判定バッジ */
+  .verdict-item__badge {
+    font-family: "Syne", sans-serif;
+    font-size: .55rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    padding: .18rem .5rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .verdict-item__badge--hire {
+    background: rgba(90,154,114,.12);
+    color: #3d7d5a;
+    border: 1px solid rgba(90,154,114,.3);
+  }
+
+  .verdict-item__badge--conditional {
+    background: var(--amber-light, rgba(200,124,34,.08));
+    color: var(--amber, #c87c22);
+    border: 1px solid var(--amber-line, rgba(200,124,34,.35));
+  }
+
+  .verdict-item__badge--pass {
+    background: rgba(0,0,0,.04);
+    color: var(--ink-muted, #666666);
+    border: 1px solid var(--border-mid, rgba(0,0,0,.18));
+  }
+
+  .verdict-item__badge--other {
+    background: rgba(0,0,0,.04);
+    color: var(--ink-muted, #666666);
+    border: 1px solid var(--border, rgba(0,0,0,.10));
+  }
+
+  /* AI名 */
+  .verdict-item__name {
+    font-family: "Noto Serif JP", serif;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    color: var(--ink, #111111) !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+  }
+
+  /* 選定理由 */
+  .verdict-item__reason {
+    font-size: .82rem !important;
+    line-height: 1.8 !important;
+    color: var(--ink-muted, #666666) !important;
+    margin: 0 !important;
+  }
+</style>

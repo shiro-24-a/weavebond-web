@@ -1,0 +1,133 @@
+---
+// src/components/ReviewNote.astro
+//
+// 使い方:
+//   <ReviewNote>
+//     ここで興味深いのは、ChatGPT は質問の意図を正確に読み取り…
+//   </ReviewNote>
+//
+//   <ReviewNote title="着目点" type="caution">
+//     一方で、この回答には曖昧さも残る。
+//   </ReviewNote>
+//
+// Props:
+//   title : string — ラベルテキスト（省略時 "面接官メモ"）
+//   type  : "default" | "caution" | "positive"
+//           default  → アンバーボーダー（通常の考察）
+//           positive → グリーン寄りのアクセント（ポジティブ評価）
+//           caution  → グレーボーダー（留保・懸念）
+
+interface Props {
+  title?: string;
+  type?: "default" | "positive" | "caution";
+}
+
+const {
+  title = "面接官メモ",
+  type = "default",
+} = Astro.props;
+---
+
+<aside class={`review-note review-note--${type}`}>
+  <header class="review-note__header">
+    <span class="review-note__icon" aria-hidden="true">
+      {type === "positive" ? "◎" : type === "caution" ? "△" : "✍"}
+    </span>
+    <span class="review-note__title">{title}</span>
+    <span class="review-note__rule"></span>
+  </header>
+  <div class="review-note__body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     評価メモ
+     ・BlogPost.astro の blockquote を発展させたデザイン
+     ・左ボーダー＋ウォームホワイト背景で「挿入感」を演出
+     ・type によってボーダー色のみ切り替え
+  ───────────────────────────────────────────────────────────── */
+
+  .review-note {
+    background: var(--paper-card, #fcfaf6);
+    border: 1px solid var(--border, rgba(0,0,0,.10));
+    border-left-width: 3px;
+    border-radius: 4px;
+    padding: 1.4rem 1.6rem;
+    margin: 2.8rem 0;
+  }
+
+  /* type variants — 左ボーダー色のみ差分 */
+  .review-note--default  { border-left-color: var(--amber, #c87c22); }
+  .review-note--positive { border-left-color: #5a9a72; }
+  .review-note--caution  { border-left-color: var(--border-mid, rgba(0,0,0,.18)); }
+
+  /* ── ヘッダー行 ── */
+  .review-note__header {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    margin-bottom: 1rem;
+  }
+
+  .review-note__icon {
+    font-size: .75rem;
+    line-height: 1;
+    color: var(--amber, #c87c22);
+    flex-shrink: 0;
+  }
+
+  .review-note--positive .review-note__icon { color: #5a9a72; }
+  .review-note--caution  .review-note__icon { color: var(--ink-muted, #666666); }
+
+  .review-note__title {
+    font-family: "Syne", sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber, #c87c22);
+    flex-shrink: 0;
+  }
+
+  .review-note--positive .review-note__title { color: #5a9a72; }
+  .review-note--caution  .review-note__title { color: var(--ink-muted, #666666); }
+
+  /* タイトル右側の水平線でラベルを強調 */
+  .review-note__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border, rgba(0,0,0,.10));
+  }
+
+  /* ── 本文 ── */
+  .review-note__body :global(p) {
+    font-size: .95rem !important;
+    line-height: 2.05 !important;
+    color: var(--ink-muted, #666666) !important;
+    margin: 0 0 .8rem 0 !important;
+  }
+
+  .review-note__body :global(p:last-child) {
+    margin-bottom: 0 !important;
+  }
+
+  .review-note__body :global(ul),
+  .review-note__body :global(ol) {
+    padding-left: 1.2rem;
+    line-height: 2;
+    color: var(--ink-muted, #666666);
+    font-size: .9rem;
+    margin-bottom: 0;
+  }
+
+  .review-note__body :global(li) {
+    margin-bottom: .4rem;
+  }
+
+  .review-note__body :global(strong) {
+    color: var(--ink, #111111);
+    font-weight: 700;
+  }
+</style>

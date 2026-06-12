@@ -1,0 +1,470 @@
+---
+// src/pages/privacy.astro
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プライバシーポリシー | AIとの付き合い方研究所</title>
+  <meta name="description" content="AIとの付き合い方研究所のプライバシーポリシーです。個人情報の取扱い、Cookie、広告配信、アクセス解析について説明しています。" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap');
+
+    :root {
+      --ink: #111111;
+      --ink-soft: #2b2b2b;
+      --ink-muted: #666666;
+
+      --paper: #f7f4ee;
+      --paper-card: #fcfaf6;
+
+      --amber: #c87c22;
+      --amber-light: rgba(200,124,34,.08);
+      --amber-line: rgba(200,124,34,.35);
+
+      --border: rgba(0,0,0,.10);
+      --border-mid: rgba(0,0,0,.18);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans JP", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ── HEADER ── */
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(247,244,238,.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .site-logo span {
+      color: var(--amber);
+    }
+
+    .back-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .back-link:hover {
+      color: var(--amber);
+    }
+
+    /* ── ARTICLE WRAP ── */
+
+    .article-wrap {
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    /* ── PAGE HEADER ── */
+
+    .article-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .article-meta {
+      display: flex;
+      gap: .8rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .article-tag {
+      background: var(--amber-light);
+      color: var(--amber);
+      padding: .3rem .7rem;
+      border-radius: 4px;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .article-date {
+      font-size: .8rem;
+      color: var(--ink-muted);
+    }
+
+    .article-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      color: var(--ink);
+    }
+
+    .article-desc {
+      color: var(--ink-muted);
+      line-height: 1.9;
+      font-size: .95rem;
+    }
+
+    /* ── POLICY BODY ── */
+
+    .article-body {
+      color: var(--ink);
+    }
+
+    .article-body p {
+      font-size: 1.05rem;
+      line-height: 2.15;
+      color: var(--ink-soft);
+      margin-bottom: 1.8rem;
+    }
+
+    .article-body strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .article-body hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    .article-body h2 {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.45rem;
+      line-height: 1.6;
+      color: var(--ink);
+
+      margin-top: 4rem;
+      margin-bottom: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .article-body h2::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .article-body h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--amber);
+      padding-left: .8rem;
+      color: var(--ink);
+    }
+
+    .article-body ul {
+      margin: 1.2rem 0 1.8rem;
+      padding-left: 1.5rem;
+      line-height: 2;
+    }
+
+    .article-body li {
+      font-size: .95rem;
+      margin-bottom: .5rem;
+      color: var(--ink-soft);
+    }
+
+    /* AI免責ハイライト */
+    .article-body .highlight-note {
+      background: var(--amber-light);
+      border-left: 3px solid var(--amber);
+      padding: 1.2rem 1.5rem;
+      border-radius: 4px;
+      margin: 2rem 0;
+    }
+
+    .article-body .highlight-note p {
+      margin-bottom: 0;
+      font-size: .95rem;
+    }
+
+    /* ── POLICY META ── */
+
+    .policy-meta {
+      margin-top: 4rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .policy-meta p {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      margin-bottom: .4rem;
+      line-height: 1.7;
+    }
+
+    .policy-meta p:last-child {
+      margin-bottom: 0;
+    }
+
+    .policy-meta a {
+      color: var(--amber);
+      text-decoration: underline;
+    }
+
+    /* ── FOOTER ── */
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .site-footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .footer-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .footer-logo span {
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .footer-link:hover {
+      color: var(--amber);
+    }
+
+    /* ── RESPONSIVE ── */
+
+    @media (max-width: 640px) {
+      .article-wrap {
+        padding: 2.5rem 1.25rem 5rem;
+      }
+
+      .article-title {
+        font-size: 1.6rem;
+      }
+
+      .article-body p {
+        font-size: 1rem;
+      }
+
+      .article-body h2 {
+        font-size: 1.25rem;
+      }
+
+      .site-footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .footer-links {
+        gap: 1.2rem;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
+      <a href="/" class="back-link">← 記事一覧</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="article-wrap">
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="article-tag">Legal</span>
+          <time class="article-date">制定日：2026年6月5日</time>
+        </div>
+        <h1 class="article-title">プライバシーポリシー</h1>
+        <p class="article-desc">
+          当サイトの個人情報の取扱い、免責事項についてご案内します。
+        </p>
+      </header>
+
+      <div class="article-body">
+
+        <p>
+          AIとの付き合い方研究所 | Weavebond（以下、「当サイト」といいます。）は、利用者の個人情報の保護を重要な責務と認識し、個人情報の保護に関する法令その他の規範を遵守するとともに、以下のとおりプライバシーポリシーを定め、その適切な取扱いおよび保護に努めます。
+        </p>
+
+        <h2>第1条（個人情報の利用目的）</h2>
+        <p>
+          当サイトでは、お問い合わせフォームの送信や記事へのコメント投稿等の際に、氏名（ハンドルネームを含みます。）、メールアドレスその他の個人情報をご提供いただく場合があります。<br>
+          取得した個人情報は、以下の目的の範囲内で利用し、これらの目的以外には利用いたしません。
+        </p>
+        <ul>
+          <li>お問い合わせに対する回答および必要な連絡のため</li>
+          <li>コメント投稿者の本人確認のため</li>
+          <li>サービス向上および運営上必要な情報提供のため</li>
+          <li>不正行為の防止および対応のため</li>
+        </ul>
+
+        <h2>第2条（個人情報の第三者提供）</h2>
+        <p>
+          当サイトは、取得した個人情報について、次のいずれかに該当する場合を除き、本人の同意を得ることなく第三者に開示または提供いたしません。
+        </p>
+        <ul>
+          <li>法令に基づく場合</li>
+          <li>人の生命、身体または財産の保護のために必要がある場合であって、本人の同意を得ることが困難である場合</li>
+          <li>国の機関または地方公共団体もしくはその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合であって、本人の同意を得ることにより当該事務の遂行に支障を及ぼすおそれがある場合</li>
+        </ul>
+
+        <h2>第3条（Cookie（クッキー）の利用について）</h2>
+        <p>
+          当サイトでは、利用者の利便性向上、広告配信およびアクセス解析を目的として、Cookieを使用しております。<br>
+          Cookieとは、利用者がウェブサイトを閲覧した際にブラウザへ保存される情報であり、個人を特定する情報は含まれておりません。<br>
+          利用者は、ブラウザの設定によりCookieの受け入れを拒否または無効化することが可能です。ただし、Cookieを無効にした場合、当サイトの一部機能が正常に利用できない場合があります。
+        </p>
+
+        <h2>第4条（広告配信サービスについて）</h2>
+        <p>
+          当サイトは、第三者配信の広告サービスである Google AdSense（グーグルアドセンス） を利用しております。<br>
+          Googleを含む広告配信事業者は、利用者の興味・関心に応じた広告を表示するために、Cookie等の技術を使用することがあります。<br>
+          これにより、利用者が当サイトや他のウェブサイトへ過去にアクセスした際の情報に基づいて、適切な広告が配信される場合があります。<br>
+          利用者は、Googleの広告設定によりパーソナライズ広告を無効にすることができます。また、第三者配信事業者によるCookieの使用を無効にすることも可能です。
+        </p>
+
+        <h2>第5条（アクセス解析ツールについて）</h2>
+        <p>
+          当サイトでは、サイト利用状況の把握およびサービス向上を目的として、Googleが提供するアクセス解析ツール「Googleアナリティクス」を利用しております。<br>
+          Googleアナリティクスは、トラフィックデータの収集のためにCookieを使用しておりますが、当該データは匿名で収集されており、個人を特定するものではありません。<br>
+          利用者はブラウザの設定によりCookieを無効にすることで、これらの情報収集を拒否することができます。<br>
+          Googleアナリティクスの利用により収集されるデータの取扱いについては、Googleの定める規約およびプライバシーポリシーをご確認ください。
+        </p>
+
+        <h2>第6条（免責事項）</h2>
+        <p>
+          当サイトに掲載する情報については、可能な限り正確な情報を提供するよう努めておりますが、その正確性、完全性、有用性、最新性その他一切の事項について保証するものではありません。
+        </p>
+        <div class="highlight-note">
+          <p>
+            当サイトには、AI（人工知能）技術を活用して生成または補助作成されたコンテンツが含まれる場合があります。これらの情報については、誤りや不正確な内容が含まれる可能性があるため、その完全性および正確性を保証するものではありません。
+          </p>
+        </div>
+        <p>
+          利用者が当サイトに掲載された情報を利用し、または利用できなかったことにより生じた損害、不利益その他一切の結果について、当サイト運営者は責任を負いません。<br>
+          また、当サイトからリンクまたはバナー等によって移動した外部サイトにおいて提供される情報、サービス等について、当サイト運営者は一切の責任を負いません。
+        </p>
+
+        <h2>第7条（著作権および肖像権）</h2>
+        <p>
+          当サイトに掲載されている文章、画像、図表、デザインその他一切のコンテンツに関する著作権およびその他の知的財産権は、当サイト運営者または正当な権利者に帰属します。<br>
+          法令により認められる場合を除き、当サイト運営者の事前の許可なく、転載、複製、改変、配布その他これらに類する行為を行うことを禁止します。<br>
+          また、掲載内容に関して著作権または肖像権等に関する問題がございましたら、お問い合わせフォームよりご連絡ください。確認のうえ、適切に対応いたします。
+        </p>
+
+        <h2>第8条（プライバシーポリシーの変更）</h2>
+        <p>
+          当サイトは、法令の改正、運営方針の変更その他必要に応じて、本ポリシーの内容を予告なく変更することができるものとします。<br>
+          変更後のプライバシーポリシーは、当サイト上に掲載した時点で効力を生じるものとし、利用者は当サイトを利用することにより、変更後の内容に同意したものとみなします。
+        </p>
+
+        <div class="policy-meta">
+          <p>制定日：2026年6月5日</p>
+          <p>サイト名：AIとの付き合い方研究所 | Weavebond</p>
+          <p>サイトURL：<a href="https://weavebond.com">https://weavebond.com</a></p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
+        <p class="footer-copy">
+          ChatGPT・Claude・Geminiとの対話から、<br>
+          AIと人間の関係を考えるブログ。
+        </p>
+      </div>
+      <nav class="footer-links">
+        <a href="/about" class="footer-link">このサイトについて</a>
+        <a href="/contact" class="footer-link">お問い合わせ</a>
+        <a href="/" class="footer-link">記事一覧へ戻る</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

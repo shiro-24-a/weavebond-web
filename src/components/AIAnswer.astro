@@ -1,0 +1,182 @@
+---
+// src/components/AIAnswer.astro
+//
+// 使い方:
+//   <AIAnswer name="ChatGPT">
+//     私の強みは、膨大なデータから素早く情報を引き出す能力です。
+//   </AIAnswer>
+//
+//   <AIAnswer name="Claude" score={4}>
+//     長い文章や複雑な文脈の把握が得意です。
+//   </AIAnswer>
+//
+// Props:
+//   name   : string  — AIの名前 (例: "ChatGPT", "Claude", "Gemini")
+//   score  : number  — 任意のスコア (1〜5)。指定するとバブル右下に表示
+//   label  : string  — 右上のラベル（省略時 "回答"）
+
+interface Props {
+  name: string;
+  score?: number;
+  label?: string;
+}
+
+const {
+  name,
+  score,
+  label = "回答",
+} = Astro.props;
+
+// スコアをドット表示に変換 (例: 4 → "●●●●○")
+function renderScore(n: number): string {
+  const filled  = "●".repeat(Math.min(Math.max(n, 0), 5));
+  const empty   = "○".repeat(5 - Math.min(Math.max(n, 0), 5));
+  return filled + empty;
+}
+---
+
+<div class="ai-answer">
+  <span class="ai-answer__label">
+    <span class="ai-answer__name">{name}</span>
+    <span class="ai-answer__label-text">{label}</span>
+  </span>
+  <div class="ai-answer__bubble">
+    <slot />
+    {score != null && (
+      <div class="ai-answer__score" aria-label={`評価スコア ${score}/5`}>
+        <span class="ai-answer__score-label">評価</span>
+        <span class="ai-answer__score-dots">{renderScore(score)}</span>
+        <span class="ai-answer__score-num">{score}/5</span>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     AI回答ブロック
+     ・右寄せ配置（面接官ブロックと対になる）
+     ・薄いアンバー背景（= サイトのアクセントカラー由来）
+     ・右上を角張らせて吹き出し起点を示す
+  ───────────────────────────────────────────────────────────── */
+
+  .ai-answer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .6rem;
+    margin: 2.8rem 0;
+  }
+
+  .ai-answer__label {
+    font-family: "Syne", sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber, #c87c22);
+
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-right: .1rem;
+  }
+
+  .ai-answer__name {
+    color: var(--ink, #111111);
+    font-size: .72rem;
+    letter-spacing: .1em;
+  }
+
+  .ai-answer__label-text {
+    color: var(--amber, #c87c22);
+  }
+
+  /* ラベル右の短い水平線 */
+  .ai-answer__label::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: var(--amber-line, rgba(200,124,34,.35));
+    flex-shrink: 0;
+  }
+
+  .ai-answer__bubble {
+    background: rgba(200,124,34,.07);
+    border: 1px solid var(--amber-line, rgba(200,124,34,.35));
+
+    /* 右上を角張らせて、残り3角は丸める */
+    border-radius: 8px 0 8px 8px;
+
+    padding: 1.3rem 1.6rem;
+    max-width: 86%;
+    position: relative;
+  }
+
+  /* 右上のコーナーにアンバーラインのアクセント */
+  .ai-answer__bubble::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 28px;
+    height: 2px;
+    background: var(--amber, #c87c22);
+    border-radius: 1px;
+  }
+
+  /* slot 内の p タグを上書きしてバブル内スタイルを統一 */
+  .ai-answer__bubble :global(p) {
+    font-size: 1rem !important;
+    line-height: 2.1 !important;
+    color: var(--ink-soft, #2b2b2b) !important;
+    margin: 0 0 .8rem 0 !important;
+  }
+
+  .ai-answer__bubble :global(p:last-of-type) {
+    margin-bottom: 0 !important;
+  }
+
+  /* スコア表示 */
+  .ai-answer__score {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: 1.1rem;
+    padding-top: .9rem;
+    border-top: 1px solid var(--amber-line, rgba(200,124,34,.35));
+  }
+
+  .ai-answer__score-label {
+    font-family: "Syne", sans-serif;
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-muted, #666666);
+    flex-shrink: 0;
+  }
+
+  .ai-answer__score-dots {
+    font-size: .72rem;
+    letter-spacing: .1em;
+    color: var(--amber, #c87c22);
+    flex-shrink: 0;
+  }
+
+  .ai-answer__score-num {
+    font-family: "Syne", sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    color: var(--ink-muted, #666666);
+    margin-left: auto;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 640px) {
+    .ai-answer__bubble {
+      max-width: 100%;
+    }
+  }
+</style>

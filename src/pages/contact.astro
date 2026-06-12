@@ -1,0 +1,432 @@
+---
+// src/pages/contact.astro
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お問い合わせ | AIとの付き合い方研究所</title>
+  <meta name="description" content="AIとの付き合い方研究所へのお問い合わせはこちらから。記事の感想・ご意見・取材依頼など、お気軽にどうぞ。" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap');
+
+    :root {
+      --ink: #111111;
+      --ink-soft: #2b2b2b;
+      --ink-muted: #666666;
+
+      --paper: #f7f4ee;
+      --paper-card: #fcfaf6;
+
+      --amber: #c87c22;
+      --amber-light: rgba(200,124,34,.08);
+      --amber-line: rgba(200,124,34,.35);
+
+      --border: rgba(0,0,0,.10);
+      --border-mid: rgba(0,0,0,.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans JP", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* HEADER */
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(247,244,238,.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .site-logo span {
+      color: var(--amber);
+    }
+
+    .back-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .back-link:hover {
+      color: var(--amber);
+    }
+
+    /* PAGE WRAP */
+
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    /* PAGE HEADER */
+
+    .page-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-eyebrow {
+      display: inline-block;
+      font-family: "Syne", sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--amber-line);
+    }
+
+    .page-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      color: var(--ink);
+    }
+
+    .page-desc {
+      font-size: 1rem;
+      line-height: 2.1;
+      color: var(--ink-muted);
+    }
+
+    /* CONTACT TYPES */
+
+    .contact-types {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .contact-type {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .contact-type-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--amber);
+      text-transform: uppercase;
+    }
+
+    .contact-type-text {
+      font-size: .85rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    /* FORM SECTION HEAD */
+
+    .form-section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .form-section-head::before {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .form-section-title {
+      font-family: "Noto Serif JP", serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* FORM BUTTON CARD */
+
+    .form-button-wrap {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .form-button-text {
+      font-size: .92rem;
+      line-height: 2;
+      color: var(--ink-muted);
+    }
+
+    .form-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: .88rem;
+      font-weight: 700;
+      color: white;
+      background: var(--amber);
+      padding: .85rem 1.7rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .form-button:hover {
+      opacity: .85;
+    }
+
+    .form-button::after {
+      content: "→";
+    }
+
+    /* NOTE */
+
+    .form-note {
+      margin-top: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--amber-light);
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+    }
+
+    .form-note p {
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--ink-muted);
+    }
+
+    /* FOOTER */
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .site-footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .footer-logo {
+      font-family: "Noto Serif JP", serif;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .footer-logo span {
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: .72rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .footer-link:hover {
+      color: var(--amber);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 640px) {
+      .page-wrap {
+        padding: 2.5rem 1.25rem 5rem;
+      }
+
+      .contact-types {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 1.65rem;
+      }
+
+      .form-button-wrap {
+        padding: 1.8rem 1.4rem;
+      }
+
+      .form-button {
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      .site-footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .footer-links {
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        AI<span>との付き合い方</span>研究所
+      </a>
+      <a href="/" class="back-link">← 記事一覧</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrap">
+
+      <header class="page-header">
+        <span class="page-eyebrow">Contact</span>
+        <h1 class="page-title">お問い合わせ</h1>
+        <p class="page-desc">
+          記事への感想・ご意見、取材・執筆のご依頼、その他ご質問など、<br>
+          お気軽にご連絡ください。
+        </p>
+      </header>
+
+      <div class="contact-types">
+        <div class="contact-type">
+          <span class="contact-type-label">感想・意見</span>
+          <p class="contact-type-text">記事を読んで感じたこと、気になった点など</p>
+        </div>
+        <div class="contact-type">
+          <span class="contact-type-label">取材・依頼</span>
+          <p class="contact-type-text">執筆・登壇・メディア掲載などのご相談</p>
+        </div>
+        <div class="contact-type">
+          <span class="contact-type-label">その他</span>
+          <p class="contact-type-text">上記に当てはまらないご質問・ご要望</p>
+        </div>
+      </div>
+
+      <div class="form-section-head">
+        <h2 class="form-section-title">フォームから送る</h2>
+      </div>
+
+      <div class="form-button-wrap">
+        <p class="form-button-text">
+          Googleフォームが別タブで開きます。<br>
+          必要事項をご記入のうえ、送信してください。
+        </p>
+        <a
+          href="https://forms.gle/A66jEkEvhhuu9eVs6"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="form-button"
+        >
+          お問い合わせフォームを開く
+        </a>
+      </div>
+
+      <div class="form-note">
+        <p>
+          いただいたお問い合わせには、内容を確認のうえ順次ご返信いたします。
+          返信にはお時間をいただく場合がございます。あらかじめご了承ください。
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
+        <p class="footer-copy">
+          ChatGPT・Claude・Geminiとの対話から、<br>
+          AIと人間の関係を考えるブログ。
+        </p>
+      </div>
+      <nav class="footer-links">
+        <a href="/about" class="footer-link">このサイトについて</a>
+        <a href="/privacy" class="footer-link">プライバシーポリシー</a>
+        <a href="/" class="footer-link">記事一覧へ戻る</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
