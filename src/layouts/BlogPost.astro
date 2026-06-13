@@ -20,7 +20,7 @@ day: "numeric",
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>{frontmatter.title} | Weavebond</title>
+  <title>{frontmatter.title} | AIとの付き合い方研究所</title>
 
 {frontmatter.description && ( <meta name="description" content={frontmatter.description} />
 )}
@@ -156,7 +156,7 @@ day: "numeric",
   .article-body p {
   font-size: 1.05rem;
   line-height: 2.15;
-  color: red !important;
+  color: var(--ink-soft);
   margin-bottom: 1.8rem;
 }
 
@@ -259,48 +259,25 @@ day: "numeric",
 
     /* FOOTER */
 
-    .site-footer {
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
-    }
-
-    .site-footer-inner {
-      max-width: 1100px;
+    .article-footer {
+      max-width: 760px;
       margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
+      padding: 3rem 1.5rem 5rem;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 2rem;
+      align-items: center;
+      gap: 1rem;
     }
 
-    .footer-brand {
-      display: flex;
-      flex-direction: column;
-      gap: .6rem;
-    }
-
-    .footer-logo {
-      font-family: "Noto Serif JP", serif;
-      font-size: .9rem;
-      font-weight: 600;
-      color: var(--ink-soft);
-    }
-
-    .footer-logo span {
+    .footer-back {
       color: var(--amber);
-    }
-
-    .footer-copy {
-      font-size: .72rem;
-      color: var(--ink-muted);
-      line-height: 1.7;
+      font-weight: 700;
     }
 
     .footer-links {
       display: flex;
-      gap: 2rem;
-      align-items: center;
+      gap: 1.5rem;
     }
 
     .footer-link {
@@ -329,15 +306,6 @@ day: "numeric",
       .article-body h2 {
         font-size: 1.25rem;
       }
-
-      .site-footer-inner {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-
-      .footer-links {
-        gap: 1.2rem;
-      }
     }
   </style>
 
@@ -347,7 +315,7 @@ day: "numeric",
 
   <header class="site-header">
     <div class="site-header-inner">
-      <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
+   <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
       <a href="/" class="back-link">← 記事一覧</a>
     </div>
   </header>
@@ -385,22 +353,15 @@ day: "numeric",
 
 </article>
 
-<footer class="site-footer">
-  <div class="site-footer-inner">
-    <div class="footer-brand">
-      <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
-      <p class="footer-copy">
-        ChatGPT・Claude・Geminiとの対話から、<br>
-        AIと人間の関係を考えるブログ。
-      </p>
-    </div>
+<footer class="article-footer">
+    <a href="/" class="footer-back">
+      ← 記事一覧へ戻る
+    </a>
     <nav class="footer-links">
       <a href="/about" class="footer-link">このサイトについて</a>
       <a href="/privacy" class="footer-link">プライバシーポリシー</a>
-      <a href="/contact" class="footer-link">お問い合わせ</a>
     </nav>
-  </div>
-</footer>
+  </footer>
 
 </body>
 </html>

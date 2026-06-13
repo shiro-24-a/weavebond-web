@@ -22,7 +22,7 @@ const sessionLabel = frontmatter.sessionNumber
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>{frontmatter.title} | AI採用面接シリーズ — Weavebond</title>
+  <title>{frontmatter.title} | AI採用面接シリーズ — AIとの付き合い方研究所</title>
 
   {frontmatter.description && (
     <meta name="description" content={frontmatter.description} />
@@ -91,10 +91,14 @@ const sessionLabel = frontmatter.sessionNumber
     }
 
     .site-logo {
-      font-family: "Syne", sans-serif;
-      letter-spacing: .18em;
-      font-size: .72rem;
-      font-weight: 700;
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .site-logo span {
       color: var(--amber);
     }
 
@@ -426,6 +430,21 @@ const sessionLabel = frontmatter.sessionNumber
       line-height: 1.7;
     }
 
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .footer-link:hover {
+      color: var(--amber);
+    }
+
     /* ─────────────────────────────────────────────────────────────
        RESPONSIVE
     ───────────────────────────────────────────────────────────── */
@@ -479,8 +498,8 @@ const sessionLabel = frontmatter.sessionNumber
   <!-- SITE HEADER -->
   <header class="site-header">
     <div class="site-header-inner">
-      <a href="/" class="site-logo">WEAVEBOND</a>
-      <a href="/" class="back-link">← 記事一覧</a>
+      <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
+      <a href="/blog/ai-interview" class="back-link">← 記事一覧</a>
     </div>
   </header>
 
@@ -562,11 +581,11 @@ const sessionLabel = frontmatter.sessionNumber
 
   <!-- FOOTER -->
   <footer class="article-footer">
-    <a href="/" class="footer-back">← 記事一覧へ戻る</a>
-    <p class="footer-series-note">
-      AI採用面接シリーズ<br>
-      ChatGPT · Claude · Gemini
-    </p>
+    <a href="/blog/ai-interview" class="footer-back">← 記事一覧へ戻る</a>
+    <nav class="footer-links">
+      <a href="/about" class="footer-link">このサイトについて</a>
+      <a href="/privacy" class="footer-link">プライバシーポリシー</a>
+    </nav>
   </footer>
 
 </body>

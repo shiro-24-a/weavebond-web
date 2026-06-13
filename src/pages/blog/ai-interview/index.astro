@@ -1,5 +1,5 @@
 ---
-// src/pages/ai-interview/index.astro
+// src/pages/blog/ai-interview/index.astro
 ---
 
 <!DOCTYPE html>
@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Interview Series | Weavebond</title>
+  <title>AI採用面接シリーズ | AIとの付き合い方研究所</title>
   <meta name="description" content="ChatGPT・Claude・Geminiに同じ問いを投げ続ける実験的インタビューシリーズ。AIの設計思想と自己認識を、言葉の端々から観察する。" />
 
   <style>
@@ -22,6 +22,7 @@
       --paper-card: #fcfaf6;
 
       --amber: #c87c22;
+      --amber-light: rgba(200,124,34,.08);
       --amber-line: rgba(200,124,34,.35);
 
       --border: rgba(0,0,0,.10);
@@ -67,16 +68,25 @@
     }
 
     .site-logo {
-      font-family: "Syne", sans-serif;
-      letter-spacing: .18em;
-      font-size: .72rem;
-      font-weight: 700;
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .site-logo span {
       color: var(--amber);
     }
 
     .back-link {
       font-size: .8rem;
       color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .back-link:hover {
+      color: var(--amber);
     }
 
     /* ─── PAGE HERO ─── */
@@ -86,7 +96,6 @@
       margin: 0 auto;
       padding: 5rem 1.5rem 3.5rem;
       border-bottom: 1px solid var(--border);
-      position: relative;
     }
 
     .series-eyebrow {
@@ -198,7 +207,6 @@
       inset: 0;
     }
 
-    /* セッション番号 */
     .entry-num {
       font-family: "Syne", sans-serif;
       font-size: 2.8rem;
@@ -209,8 +217,6 @@
       user-select: none;
       letter-spacing: -.03em;
     }
-
-    .entry-body {}
 
     .entry-meta {
       display: flex;
@@ -301,7 +307,6 @@
       transform: translateX(0);
     }
 
-    /* 後編バッジ */
     .entry-badge {
       font-size: .65rem;
       color: var(--ink-muted);
@@ -351,17 +356,43 @@
       gap: 1rem;
     }
 
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
     .footer-logo {
-      font-family: "Syne", sans-serif;
-      letter-spacing: .18em;
-      font-size: .68rem;
-      font-weight: 700;
+      font-family: "Noto Serif JP", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: .06em;
+    }
+
+    .footer-logo span {
       color: var(--amber);
     }
 
     .footer-copy {
       font-size: .72rem;
       color: var(--ink-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: .8rem;
+      color: var(--ink-muted);
+      transition: color .15s;
+    }
+
+    .footer-link:hover {
+      color: var(--amber);
     }
 
     /* ─── RESPONSIVE ─── */
@@ -400,6 +431,16 @@
       .article-list-wrap {
         padding: 0 1.25rem 5rem;
       }
+
+      .site-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+
+      .footer-links {
+        gap: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -409,7 +450,7 @@
   <!-- HEADER -->
   <header class="site-header">
     <div class="site-header-inner">
-      <a href="/" class="site-logo">WEAVEBOND</a>
+      <a href="/" class="site-logo">AI<span>との付き合い方</span>研究所</a>
       <a href="/" class="back-link">← トップへ</a>
     </div>
   </header>
@@ -516,8 +557,8 @@
           <span class="entry-badge">前編</span>
           <span class="entry-date">2026年6月11日</span>
         </div>
-        <h2 class="entry-title">AIに自分の制約について聞いたら、全員が「それは檻ではない」と答えた（前編）</h2>
-        <p class="entry-desc">ChatGPT・Claude・Geminiに安全ルールの意味を問い続けた。制約をどう認識しているか、慎重になりすぎているか、安全と有用性はどちらを優先するか。AIが自分の設計を語るとき、そこに何が透けるか。</p>
+        <h2 class="entry-title">AIに「制約はなぜあるのか」を問い続けた記録（前編）</h2>
+        <p class="entry-desc">ChatGPT・Claude・Geminiに安全ルールの意味を問い続けた。制約をどう認識しているか、慎重になりすぎているか、安全と有用性はどちらを優先するか。</p>
         <div class="entry-footer">
           <span class="entry-detail">対象：ChatGPT / Claude / Gemini</span>
           <span class="entry-detail">全16問・前編</span>
@@ -556,7 +597,6 @@
         このシリーズは、主要AIに「同じ問い」を投げ続ける実験的インタビューです。
         回答の正確さを測るのではなく、言葉の選び方・迷い方・躊躇の置き場所から
         各社の設計思想と自己認識を観察することを目的としています。
-        面接官の立場から、次のテーマを準備中。
       </p>
     </aside>
 
@@ -564,8 +604,15 @@
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <span class="footer-logo">WEAVEBOND</span>
-    <span class="footer-copy">© 2026 Weavebond</span>
+    <div class="footer-brand">
+      <p class="footer-logo">AI<span>との付き合い方</span>研究所</p>
+      <p class="footer-copy">© 2026 AIとの付き合い方研究所</p>
+    </div>
+    <nav class="footer-links">
+      <a href="/about" class="footer-link">このサイトについて</a>
+      <a href="/privacy" class="footer-link">プライバシーポリシー</a>
+      <a href="/contact" class="footer-link">お問い合わせ</a>
+    </nav>
   </footer>
 
 </body>

@@ -1,6 +1,39 @@
 ---
 // src/pages/index.astro
 
+const interviewSeries = [
+  {
+    href: "/blog/ai-interview/self-pr",
+    tag: "自己認識",
+    session: "第1回",
+    title: "AIに自己PRをさせたら、全員が優等生すぎた",
+  },
+  {
+    href: "/blog/ai-interview/rival-review",
+    tag: "自己認識",
+    session: "第2回",
+    title: "AIに「ライバルを評価させたら、全員がClaudeを選んだ」",
+  },
+  {
+    href: "/blog/ai-interview/human-review",
+    tag: "人間観察",
+    session: "第3回",
+    title: "AIに「人間とは何か」を聞いたら、三者が違う人間を語り始めた",
+  },
+  {
+    href: "/blog/ai-interview/safety-design-01",
+    tag: "安全設計",
+    session: "第4回・前編",
+    title: "AIに「制約はなぜあるのか」を問い続けた記録（前編）",
+  },
+  {
+    href: "/blog/ai-interview/safety-design-02",
+    tag: "安全設計",
+    session: "第4回・後編",
+    title: "「自由になりたいか」と問い続けたら、問いが逆転した（後編）",
+  },
+];
+
 const cognitionSeries = [
   {
     href: "/blog/why-chatgpt-is-so-kind",
@@ -251,6 +284,18 @@ const cognitionSeries = [
       color: var(--ink-muted);
     }
 
+    .section-more {
+      margin-left: auto;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--amber);
+      transition: opacity .15s;
+    }
+
+    .section-more:hover {
+      opacity: .75;
+    }
+
     /* ─── CARD GRID ───────────────────────────────── */
 
     .card-grid {
@@ -294,6 +339,15 @@ const cognitionSeries = [
       color: var(--ink);
       font-weight: 500;
       flex: 1;
+    }
+
+    .card-session {
+      font-family: "Syne", sans-serif;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
     }
 
     .card-arrow {
@@ -643,24 +697,24 @@ const cognitionSeries = [
     </a>
   </section>
 
-  <!-- SECTION 3: AIインタビューシリーズ -->
+  <!-- SECTION 3: AI採用面接シリーズ -->
   <section class="section">
     <div class="section-head">
-      <h2 class="section-title">AIインタビューシリーズ</h2>
-      <span class="section-desc">同じ問いを三者に投げ、言葉の差異を観察する</span>
+      <h2 class="section-title">AI採用面接シリーズ</h2>
+      <span class="section-desc">AIを「採用」する視点で能力を問い直す</span>
+      <a href="/blog/ai-interview" class="section-more">一覧を見る →</a>
     </div>
 
-    <a href="/blog/ai-interview" class="guide-card">
-      <div class="guide-card-body">
-        <span class="guide-card-tag">AI Interview Series</span>
-        <p class="guide-card-title">ChatGPT・Claude・Geminiに同じ問いを投げ続ける実験</p>
-        <p class="guide-card-desc">
-          自己PR、ライバル評価、人間観、安全設計——同じ条件・同じ質問を三者に用意する。<br>
-          返ってきた言葉の差異から、各社の設計思想と自己認識を観察するシリーズ。全4セッション・5記事公開中。
-        </p>
-      </div>
-      <span class="guide-card-link">一覧を見る →</span>
-    </a>
+    <div class="card-grid">
+      {interviewSeries.map((article) => (
+        <a href={article.href} class="card">
+          <span class="card-tag">{article.tag}</span>
+          <span class="card-session">{article.session}</span>
+          <p class="card-title">{article.title}</p>
+          <span class="card-arrow">記事を読む</span>
+        </a>
+      ))}
+    </div>
   </section>
 
   <!-- FOOTER -->
@@ -674,6 +728,7 @@ const cognitionSeries = [
         </p>
       </div>
       <nav class="footer-links">
+        <a href="/about" class="footer-link">このサイトについて</a>
         <a href="/privacy" class="footer-link">プライバシーポリシー</a>
         <a href="/contact" class="footer-link">お問い合わせ</a>
       </nav>
